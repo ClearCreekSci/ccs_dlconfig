@@ -1,2 +1,2 @@
 # ccs_dlconfig
-Shared configuration module for data logging applications
+Simple, shared configuration module for data logging applications
