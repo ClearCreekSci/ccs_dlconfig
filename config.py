@@ -3,20 +3,25 @@ import os
 TAG_USE_METRIC = 'use_metric'
 TAG_FREQUENCY = 'frequency'
 TAG_PACKAGE_RATE = 'package_rate'
+TAG_VERSION = 'version'
+TAG_SECRET = 'secret'
 
 CONFIG_PATH = '/opt/ccs/WeatherLogger/settings.cfg'
 
+DEFAULT_VERSION = 1
 DEFAULT_METRIC = True
 DEFAULT_FREQUENCY = 30
 DEFAULT_PACKAGE_RATE = 48
-
+DEFAULT_SECRET = 'deadbeef'
 
 class Settings(object):
     
     def __init__(self,raise_exceptions=False):
+        self.version = DEFAULT_VERSION
         self.use_metric = DEFAULT_METRIC
         self.frequency = DEFAULT_FREQUENCY
         self.package_rate = DEFAULT_PACKAGE_RATE
+        self.secret = DEFAULT_SECRET
         self.read()
 
     def read(self):
@@ -35,6 +40,10 @@ class Settings(object):
                                     self.frequency = int(parts[1].strip())
                             elif parts[0].strip() == TAG_PACKAGE_RATE:
                                     self.package_rate = int(parts[1].strip())
+                            elif parts[0].strip() == TAG_VERSION:
+                                    self.version = int(parts[1].strip())
+                            elif parts[0].strip() == TAG_SECRET:
+                                    self.version = parts[1].strip()
         else:
             if raise_exceptions:
                 raise FileNotFoundError("Couldn't find file: " + CONFIG_PATH)
@@ -43,7 +52,9 @@ class Settings(object):
 
     def write(self):
         with open(CONFIG_PATH,'wt') as fd:
+            fd.write(TAG_VERSION + '=' + str(self.version) + '\n')
             fd.write(TAG_USE_METRIC + '=' + str(self.use_metric) + '\n')
             fd.write(TAG_FREQUENCY + '=' + str(self.frequency) + '\n')
             fd.write(TAG_PACKAGE_RATE + '=' + str(self.package_rate) + '\n')
+            fd.write(TAG_SECRET + '=' + str(self.secret) + '\n')
 
