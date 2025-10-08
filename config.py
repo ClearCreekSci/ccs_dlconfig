@@ -6,7 +6,7 @@ TAG_PACKAGE_RATE = 'package_rate'
 TAG_VERSION = 'version'
 TAG_SECRET = 'secret'
 
-CONFIG_PATH = '/opt/ccs/WeatherLogger/settings.cfg'
+CONFIG_PATH = '/opt/ccs/WeatherDataLogger/settings.cfg'
 
 DEFAULT_VERSION = 1
 DEFAULT_METRIC = True
