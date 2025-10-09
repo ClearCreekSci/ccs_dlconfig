@@ -42,7 +42,7 @@ class Settings(object):
                             elif parts[0].strip() == TAG_PACKAGE_RATE:
                                     self.package_rate = int(parts[1].strip())
                             elif parts[0].strip() == TAG_VERSION:
-                                    self.version = int(parts[1].strip())
+                                    self.version = parts[1].strip()
                             elif parts[0].strip() == TAG_SECRET:
                                     self.version = parts[1].strip()
         else:
