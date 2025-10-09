@@ -44,7 +44,7 @@ class Settings(object):
                             elif parts[0].strip() == TAG_VERSION:
                                     self.version = parts[1].strip()
                             elif parts[0].strip() == TAG_SECRET:
-                                    self.version = parts[1].strip()
+                                    self.secret = parts[1].strip()
         else:
             if self.raise_exceptions:
                 raise FileNotFoundError("Couldn't find file: " + CONFIG_PATH)
