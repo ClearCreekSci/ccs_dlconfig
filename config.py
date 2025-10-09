@@ -22,6 +22,7 @@ class Settings(object):
         self.frequency = DEFAULT_FREQUENCY
         self.package_rate = DEFAULT_PACKAGE_RATE
         self.secret = DEFAULT_SECRET
+        self.raise_exceptions = raise_exceptions
         self.read()
 
     def read(self):
@@ -45,7 +46,7 @@ class Settings(object):
                             elif parts[0].strip() == TAG_SECRET:
                                     self.version = parts[1].strip()
         else:
-            if raise_exceptions:
+            if self.raise_exceptions:
                 raise FileNotFoundError("Couldn't find file: " + CONFIG_PATH)
             else:
                 self.write()
