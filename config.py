@@ -1,5 +1,4 @@
 import os
-import
 
 TAG_USE_METRIC = 'use_metric'
 TAG_FREQUENCY = 'frequency'
