@@ -1,10 +1,12 @@
 import os
+import
 
 TAG_USE_METRIC = 'use_metric'
 TAG_FREQUENCY = 'frequency'
 TAG_PACKAGE_RATE = 'package_rate'
 TAG_VERSION = 'version'
 TAG_SECRET = 'secret'
+TAG_PASSWORD = 'password'
 
 CONFIG_PATH = '/opt/ccs/WeatherDataLogger/settings.cfg'
 
@@ -13,21 +15,24 @@ DEFAULT_METRIC = True
 DEFAULT_FREQUENCY = 30
 DEFAULT_PACKAGE_RATE = 48
 DEFAULT_SECRET = 'deadbeef'
-
+# Default password is: 'MeasureYourWorld'
+DEFAULT_PASSWORD = '$2b$12$fw.y/dnCicR9IW7hLjQaKeV0kwAzo5lVrEVSfK0kL5j6lP1kMeNCu'
 class Settings(object):
     
-    def __init__(self,raise_exceptions=False):
+    def __init__(self,path,raise_exceptions=False):
+        self.path = path
         self.version = DEFAULT_VERSION
         self.use_metric = DEFAULT_METRIC
         self.frequency = DEFAULT_FREQUENCY
         self.package_rate = DEFAULT_PACKAGE_RATE
         self.secret = DEFAULT_SECRET
+        self.passwd = DEFAULT_PASSWORD
         self.raise_exceptions = raise_exceptions
         self.read()
 
     def read(self):
-        if os.path.exists(CONFIG_PATH):
-            with open(CONFIG_PATH,'rt') as fd:
+        if os.path.exists(self.path):
+            with open(self.path,'rt') as fd:
                 for line in fd:
                     if len(line) > 0:
                         parts = line.split('=')
@@ -45,17 +50,20 @@ class Settings(object):
                                     self.version = parts[1].strip()
                             elif parts[0].strip() == TAG_SECRET:
                                     self.secret = parts[1].strip()
+                            elif parts[0].strip() == TAG_PASSWD:
+                                    self.password = parts[1].strip()
         else:
             if self.raise_exceptions:
-                raise FileNotFoundError("Couldn't find file: " + CONFIG_PATH)
+                raise FileNotFoundError("Couldn't find file: " + self.path)
             else:
                 self.write()
 
     def write(self):
-        with open(CONFIG_PATH,'wt') as fd:
+        with open(self.path,'wt') as fd:
             fd.write(TAG_VERSION + '=' + str(self.version) + '\n')
             fd.write(TAG_USE_METRIC + '=' + str(self.use_metric) + '\n')
             fd.write(TAG_FREQUENCY + '=' + str(self.frequency) + '\n')
             fd.write(TAG_PACKAGE_RATE + '=' + str(self.package_rate) + '\n')
             fd.write(TAG_SECRET + '=' + str(self.secret) + '\n')
+            fd.write(TAG_PASSWORD + '=' + str(self.passwd) + '\n')
 
