@@ -17,6 +17,8 @@ DEFAULT_PACKAGE_RATE = 48
 DEFAULT_SECRET = 'deadbeef'
 # Default password is: 'MeasureYourWorld'
 DEFAULT_PASSWORD = '$2b$12$fw.y/dnCicR9IW7hLjQaKeV0kwAzo5lVrEVSfK0kL5j6lP1kMeNCu'
+
+
 class Settings(object):
     
     def __init__(self,path,raise_exceptions=False):
