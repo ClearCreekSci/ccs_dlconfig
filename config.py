@@ -67,3 +67,11 @@ class Settings(object):
             fd.write(TAG_SECRET + '=' + str(self.secret) + '\n')
             fd.write(TAG_PASSWORD + '=' + str(self.passwd) + '\n')
 
+    def __repr__(self):
+        s = TAG_VERSION + ' = ' + str(self.version) + '\n'
+        s += TAG_USE_METRIC + ' = ' + str(self.use_metric) + '\n'
+        s += TAG_FREQUENCY + ' = ' + str(self.frequency) + '\n'
+        s += TAG_PACKAGE_RATE + ' = ' + str(self.package_rate) + '\n'
+        s += TAG_SECRET + ' = ' + str(self.secret) + '\n'
+        s += TAG_PASSWORD + ' = ' + str(self.passwd) + '\n'
+        return s
