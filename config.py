@@ -51,7 +51,7 @@ class Settings(object):
                             elif parts[0].strip() == TAG_SECRET:
                                     self.secret = parts[1].strip()
                             elif parts[0].strip() == TAG_PASSWORD:
-                                    self.password = parts[1].strip()
+                                    self.passwd = parts[1].strip()
         else:
             if self.raise_exceptions:
                 raise FileNotFoundError("Couldn't find file: " + self.path)
