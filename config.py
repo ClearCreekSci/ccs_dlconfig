@@ -50,7 +50,7 @@ class Settings(object):
                                     self.version = parts[1].strip()
                             elif parts[0].strip() == TAG_SECRET:
                                     self.secret = parts[1].strip()
-                            elif parts[0].strip() == TAG_PASSWD:
+                            elif parts[0].strip() == TAG_PASSWORD:
                                     self.password = parts[1].strip()
         else:
             if self.raise_exceptions:
