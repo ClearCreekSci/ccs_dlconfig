@@ -14,8 +14,7 @@ DEFAULT_METRIC = True
 DEFAULT_FREQUENCY = 30
 DEFAULT_PACKAGE_RATE = 48
 DEFAULT_SECRET = 'deadbeef'
-# Default password is: 'MeasureYourWorld'
-DEFAULT_PASSWORD = '$2b$12$fw.y/dnCicR9IW7hLjQaKeV0kwAzo5lVrEVSfK0kL5j6lP1kMeNCu'
+DEFAULT_PASSWORD = ''
 
 
 class Settings(object):
