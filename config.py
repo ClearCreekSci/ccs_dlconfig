@@ -27,8 +27,6 @@ TAG_VERSION = 'version'
 TAG_SECRET = 'secret'
 TAG_PASSWORD = 'password'
 
-CONFIG_PATH = '/opt/ccs/WeatherDataLogger/settings.cfg'
-
 DEFAULT_VERSION = 1
 DEFAULT_METRIC = True
 DEFAULT_FREQUENCY = 30
