@@ -60,9 +60,9 @@ class Settings(object):
         self.root = None
         self.version = None
         #self.version = DEFAULT_VERSION
-        #self.use_metric = DEFAULT_METRIC
         #self.frequency = DEFAULT_FREQUENCY
         #self.package_rate = DEFAULT_PACKAGE_RATE
+        #self.use_metric = DEFAULT_METRIC
         #self.secret = DEFAULT_SECRET
         #self.passwd = DEFAULT_PASSWORD
         self.read()
@@ -70,9 +70,9 @@ class Settings(object):
     def read(self):
         if os.path.exists(self.path):
             self.tree = et.parse(self.path)
-            self.root = tree.getroot()
-            self.version = int(self.root.attrib['version'])
-            for path in root.findall(TAG_PATHS):
+            self.root = self.tree.getroot()
+            self.version = int(self.root.attrib['version'].strip())
+            for path in self.root.findall(TAG_PATHS):
                 data = path.find(TAG_DATA)
                 if None is not data:
                     self.data_dir = data.text
@@ -87,23 +87,33 @@ class Settings(object):
             if self.raise_exceptions:
                 raise FileNotFoundError("Couldn't find file: " + self.path)
             else:
-                self.write()
+                self.write(self.path)
+                self.read()
 
-    def write(self):
-        with open(self.path,'wt') as fd:
+    
+    def write_prefix(self,fd):
             fd.write(XML_DECL + '\n')
-            fd.write('<' + TAG_ROOT + TAG_VERSION + '="' + DEFAULT_VERSION + '">\n')
+            fd.write('<' + TAG_ROOT + ' ' + TAG_VERSION + '="' + DEFAULT_VERSION + '">\n')
             fd.write('<' + TAG_PATHS + '>\n')
             if None is not self.data_dir:
                 fd.write('<' + TAG_DATA + '>' + self.data_dir + '</' + TAG_DATA + '>\n')
             if None is not self.log_dir:
-                fd.write('<' + TAG_LOG + '>' + self.data_dir + '</' + TAG_LOG + '>\n')
+                fd.write('<' + TAG_LOG + '>' + self.log_dir + '</' + TAG_LOG + '>\n')
+            fd.write('</' + TAG_PATHS + '>\n')
             #fd.write(TAG_VERSION + '=' + str(self.version) + '\n')
             #fd.write(TAG_USE_METRIC + '=' + str(self.use_metric) + '\n')
             #fd.write(TAG_FREQUENCY + '=' + str(self.frequency) + '\n')
             #fd.write(TAG_PACKAGE_RATE + '=' + str(self.package_rate) + '\n')
             #fd.write(TAG_SECRET + '=' + str(self.secret) + '\n')
             #fd.write(TAG_PASSWORD + '=' + str(self.passwd) + '\n')
+
+    def write_suffix(self,fd):
+        fd.write('</' + TAG_ROOT + '>\n')
+
+    def write(self,path):
+        with open(path,'wt') as fd:
+            self.write_prefix(fd)
+            self.write_suffix(fd)
 
     def __repr__(self):
         s = TAG_VERSION + ' = ' + str(self.version) + '\n'
