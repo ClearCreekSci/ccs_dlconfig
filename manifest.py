@@ -27,11 +27,10 @@ TAG_VERSION = 'version'
 
 class Manifest(object):
 
-    def __init__(self,raise_exceptions=False):
+    def __init__(self,path):
         self.time = ''
         self.commit = ''
         self.version = ''
-        path = os.path.join(os.getcwd(),'manifest.xml')
         self.read(path)
 
     def read(self,path):
