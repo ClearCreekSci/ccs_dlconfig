@@ -51,9 +51,7 @@ DEFAULT_PASSWORD = ''
 
 class Settings(object):
     
-    def __init__(self,path,raise_exceptions=False):
-        self.path = path
-        self.raise_exceptions = raise_exceptions
+    def __init__(self):
         self.data_dir = DEFAULT_DATA_DIR
         self.log_dir = DEFAULT_LOG_DIR
         self.tree = None
@@ -65,11 +63,16 @@ class Settings(object):
         #self.use_metric = DEFAULT_METRIC
         #self.secret = DEFAULT_SECRET
         #self.passwd = DEFAULT_PASSWORD
-        self.read()
 
-    def read(self):
-        if os.path.exists(self.path):
-            self.tree = et.parse(self.path)
+    def set_data_dir(self,v):
+        self.data_dir = v
+
+    def set_log_dir(self,v):
+        self.log_dir = v
+
+    def read(self,path):
+        if os.path.exists(path):
+            self.tree = et.parse(path)
             self.root = self.tree.getroot()
             self.version = int(self.root.attrib['version'].strip())
             for path in self.root.findall(TAG_PATHS):
@@ -84,11 +87,7 @@ class Settings(object):
                 else:
                     self.log_dir = None
         else:
-            if self.raise_exceptions:
-                raise FileNotFoundError("Couldn't find file: " + self.path)
-            else:
-                self.write(self.path)
-                self.read()
+            raise FileNotFoundError("Couldn't find file: " + path)
 
     
     def write_prefix(self,fd):
