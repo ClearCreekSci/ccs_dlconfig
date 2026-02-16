@@ -110,10 +110,10 @@ class Settings(object):
 
     def __repr__(self):
         s = TAG_VERSION + ' = ' + str(self.version) + '\n'
-        s += TAG_LOG_DIR + ' = ' + str(self.log_dir) + '\n'
-        s += TAG_CSV_DIR + ' = ' + str(self.csv_dir) + '\n'
-        s += TAG_PHOTOS_DIR + ' = ' + str(self.photos_dir) + '\n'
-        s += TAG_VIDEOS_DIR + ' = ' + str(self.videos_dir) + '\n'
+        s += TAG_LOG + ' = ' + str(self.log_dir) + '\n'
+        s += TAG_CSV + ' = ' + str(self.csv_dir) + '\n'
+        s += TAG_PHOTOS + ' = ' + str(self.photos_dir) + '\n'
+        s += TAG_VIDEOS + ' = ' + str(self.videos_dir) + '\n'
         return s
 
 
