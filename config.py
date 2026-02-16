@@ -21,51 +21,36 @@
 import os
 import xml.etree.ElementTree as et
 
-TAG_DATA = 'data'
-TAG_LOG = 'log'
-TAG_PATHS = 'paths'
-TAG_ROOT = 'ccs-config'
-TAG_VERSION = 'version'
+TAG_CSV            = 'csv'
+TAG_LOG            = 'log'
+TAG_METRIC         = 'metric'
+TAG_PATHS          = 'paths'
+TAG_PHOTOS         = 'photos'
+TAG_ROOT           = 'ccs-config'
+TAG_VERSION        = 'version'
+TAG_VIDEOS         = 'videos'
 
-DEFAULT_DATA_DIR = './data'
-DEFAULT_LOG_DIR = './log'
-DEFAULT_VERSION = '2'
+DEFAULT_CSV_DIR    = './csv'
+DEFAULT_LOG_DIR    = './log'
+DEFAULT_PHOTOS_DIR = './photos'
+DEFAULT_VIDEOS_DIR = './videos'
+DEFAULT_VERSION    = '2'
 
 XML_DECL = '<?xml version="1.0" encoding="UTF-8"?>'
-
-'''
-TAG_USE_METRIC = 'use_metric'
-TAG_FREQUENCY = 'frequency'
-TAG_PACKAGE_RATE = 'package_rate'
-TAG_VERSION = 'version'
-TAG_SECRET = 'secret'
-TAG_PASSWORD = 'password'
-
-DEFAULT_VERSION = 1
-DEFAULT_METRIC = True
-DEFAULT_FREQUENCY = 30
-DEFAULT_PACKAGE_RATE = 48
-DEFAULT_SECRET = 'deadbeef'
-DEFAULT_PASSWORD = ''
-'''
 
 class Settings(object):
     
     def __init__(self):
-        self.data_dir = DEFAULT_DATA_DIR
+        self.csv_dir = DEFAULT_CSV_DIR
         self.log_dir = DEFAULT_LOG_DIR
+        self.photos_dir = DEFAULT_PHOTOS_DIR
+        self.videos_dir = DEFAULT_VIDEOS_DIR
         self.tree = None
         self.root = None
         self.version = None
-        #self.version = DEFAULT_VERSION
-        #self.frequency = DEFAULT_FREQUENCY
-        #self.package_rate = DEFAULT_PACKAGE_RATE
-        #self.use_metric = DEFAULT_METRIC
-        #self.secret = DEFAULT_SECRET
-        #self.passwd = DEFAULT_PASSWORD
 
-    def set_data_dir(self,v):
-        self.data_dir = v
+    def set_csv_dir(self,v):
+        self.csv_dir = v
 
     def set_log_dir(self,v):
         self.log_dir = v
@@ -74,18 +59,29 @@ class Settings(object):
         if os.path.exists(path):
             self.tree = et.parse(path)
             self.root = self.tree.getroot()
-            self.version = int(self.root.attrib['version'].strip())
+            if TAG_VERSION in self.root.attrib: 
+                self.version = int(self.root.attrib['version'].strip())
             for path in self.root.findall(TAG_PATHS):
-                data = path.find(TAG_DATA)
-                if None is not data:
-                    self.data_dir = data.text
+                csv = path.find(TAG_CSV)
+                if None is not csv:
+                    self.csv_dir = csv.text.strip()
                 else:
-                    self.data_dir = None
+                    self.csv_dir = None
                 log = path.find(TAG_LOG)
                 if None is not log:
-                    self.log_dir = log.text
+                    self.log_dir = log.text.strip()
                 else:
                     self.log_dir = None
+                photos = path.find(TAG_PHOTOS)
+                if None is not photos:
+                    self.photos_dir = photos.text.strip()
+                else:
+                    self.photos_dir = None
+                videos = path.find(TAG_VIDEOS)
+                if None is not videos:
+                    self.videos_dir = videos.text.strip()
+                else:
+                    self.videos_dir = None
         else:
             raise FileNotFoundError("Couldn't find file: " + path)
 
@@ -94,17 +90,15 @@ class Settings(object):
             fd.write(XML_DECL + '\n')
             fd.write('<' + TAG_ROOT + ' ' + TAG_VERSION + '="' + DEFAULT_VERSION + '">\n')
             fd.write('<' + TAG_PATHS + '>\n')
-            if None is not self.data_dir:
-                fd.write('<' + TAG_DATA + '>' + self.data_dir + '</' + TAG_DATA + '>\n')
             if None is not self.log_dir:
                 fd.write('<' + TAG_LOG + '>' + self.log_dir + '</' + TAG_LOG + '>\n')
+            if None is not self.csv_dir:
+                fd.write('<' + TAG_CSV + '>' + self.csv_dir + '</' + TAG_CSV + '>\n')
+            if None is not self.photos_dir:
+                fd.write('<' + TAG_PHOTOS + '>' + self.photos_dir + '</' + TAG_PHOTOS + '>\n')
+            if None is not self.videos_dir:
+                fd.write('<' + TAG_VIDEOS + '>' + self.videos_dir + '</' + TAG_VIDEOS + '>\n')
             fd.write('</' + TAG_PATHS + '>\n')
-            #fd.write(TAG_VERSION + '=' + str(self.version) + '\n')
-            #fd.write(TAG_USE_METRIC + '=' + str(self.use_metric) + '\n')
-            #fd.write(TAG_FREQUENCY + '=' + str(self.frequency) + '\n')
-            #fd.write(TAG_PACKAGE_RATE + '=' + str(self.package_rate) + '\n')
-            #fd.write(TAG_SECRET + '=' + str(self.secret) + '\n')
-            #fd.write(TAG_PASSWORD + '=' + str(self.passwd) + '\n')
 
     def write_suffix(self,fd):
         fd.write('</' + TAG_ROOT + '>\n')
@@ -116,8 +110,10 @@ class Settings(object):
 
     def __repr__(self):
         s = TAG_VERSION + ' = ' + str(self.version) + '\n'
-        s += TAG_DATA_DIR + ' = ' + str(self.data_dir) + '\n'
         s += TAG_LOG_DIR + ' = ' + str(self.log_dir) + '\n'
+        s += TAG_CSV_DIR + ' = ' + str(self.csv_dir) + '\n'
+        s += TAG_PHOTOS_DIR + ' = ' + str(self.photos_dir) + '\n'
+        s += TAG_VIDEOS_DIR + ' = ' + str(self.videos_dir) + '\n'
         return s
 
 
