@@ -22,6 +22,6 @@
 
 TRUE_LIST = ['TRUE','True','true','T','t','YES','Yes','yes','Y','y','1']
 
-Boolean interpret_boolean_value(s):
+def interpret_boolean_value(s: str) -> bool:
     return s in TRUE_LIST
 
