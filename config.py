@@ -21,6 +21,7 @@
 import os
 import xml.etree.ElementTree as et
 
+TAG_BASE           = 'base'
 TAG_CSV            = 'csv'
 TAG_LOG            = 'log'
 TAG_METRIC         = 'metric'
@@ -30,6 +31,7 @@ TAG_ROOT           = 'ccs-config'
 TAG_VERSION        = 'version'
 TAG_VIDEOS         = 'videos'
 
+DEFAULT_BASE_DIR   = '.'
 DEFAULT_CSV_DIR    = './csv'
 DEFAULT_LOG_DIR    = './log'
 DEFAULT_PHOTOS_DIR = './photos'
@@ -41,6 +43,7 @@ XML_DECL = '<?xml version="1.0" encoding="UTF-8"?>'
 class Settings(object):
     
     def __init__(self):
+        self.base_dir = DEFAULT_BASE_DIR
         self.csv_dir = DEFAULT_CSV_DIR
         self.log_dir = DEFAULT_LOG_DIR
         self.photos_dir = DEFAULT_PHOTOS_DIR
@@ -48,6 +51,9 @@ class Settings(object):
         self.tree = None
         self.root = None
         self.version = None
+
+    def set_base_dir(self,v):
+        self.base_dir = v
 
     def set_csv_dir(self,v):
         self.csv_dir = v
@@ -62,6 +68,11 @@ class Settings(object):
             if TAG_VERSION in self.root.attrib: 
                 self.version = int(self.root.attrib['version'].strip())
             for path in self.root.findall(TAG_PATHS):
+                base = path.find(TAG_BASE)
+                if None is not base:
+                    self.base_dir = base.text.strip()
+                else:
+                    self.base_dir = None
                 csv = path.find(TAG_CSV)
                 if None is not csv:
                     self.csv_dir = csv.text.strip()
@@ -90,6 +101,8 @@ class Settings(object):
             fd.write(XML_DECL + '\n')
             fd.write('<' + TAG_ROOT + ' ' + TAG_VERSION + '="' + DEFAULT_VERSION + '">\n')
             fd.write('<' + TAG_PATHS + '>\n')
+            if None is not self.base_dir:
+                fd.write('<' + TAG_BASE + '>' + self.log_dir + '</' + TAG_LOG + '>\n')
             if None is not self.log_dir:
                 fd.write('<' + TAG_LOG + '>' + self.log_dir + '</' + TAG_LOG + '>\n')
             if None is not self.csv_dir:
@@ -110,6 +123,7 @@ class Settings(object):
 
     def __repr__(self):
         s = TAG_VERSION + ' = ' + str(self.version) + '\n'
+        s += TAG_BASE + ' = ' + str(self.base_dir) + '\n'
         s += TAG_LOG + ' = ' + str(self.log_dir) + '\n'
         s += TAG_CSV + ' = ' + str(self.csv_dir) + '\n'
         s += TAG_PHOTOS + ' = ' + str(self.photos_dir) + '\n'
