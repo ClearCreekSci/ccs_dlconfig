@@ -102,7 +102,7 @@ class Settings(object):
             fd.write('<' + TAG_ROOT + ' ' + TAG_VERSION + '="' + DEFAULT_VERSION + '">\n')
             fd.write('<' + TAG_PATHS + '>\n')
             if None is not self.base_dir:
-                fd.write('<' + TAG_BASE + '>' + self.log_dir + '</' + TAG_LOG + '>\n')
+                fd.write('<' + TAG_BASE + '>' + self.base_dir + '</' + TAG_BASE + '>\n')
             if None is not self.log_dir:
                 fd.write('<' + TAG_LOG + '>' + self.log_dir + '</' + TAG_LOG + '>\n')
             if None is not self.csv_dir:
