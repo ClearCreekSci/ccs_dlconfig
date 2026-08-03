@@ -28,6 +28,7 @@ class ZipEocd:
         idx = 0
         found = False
         with open(path,'rb') as fd:
+            fd.seek(-bytes_to_read,os.SEEK_END)
             buf = fd.read(bytes_to_read)
             while idx < len(buf):
                 if buf[idx] == SIG[0]:
