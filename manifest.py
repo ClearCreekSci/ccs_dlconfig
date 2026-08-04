@@ -19,13 +19,16 @@
 '''
 
 import os
+import datetime as dt
 import xml.etree.ElementTree as et
 
-TAG_TIME = 'time'
-TAG_COMMIT = 'commit'
-TAG_VERSION = 'version'
+XML_PREFIX         = '<?xml version="1.0" encoding="UTF-8"?>'
+TAG_TIME           = 'time'
+TAG_COMMIT         = 'commit'
+TAG_MANIFEST       = 'manifest'
+TAG_VERSION        = 'version'
 # Name is optional
-TAG_NAME = 'name'
+TAG_NAME           = 'name'
 
 class Manifest(object):
 
@@ -48,4 +51,18 @@ class Manifest(object):
                 self.version = child.text.strip()
             elif child.tag == TAG_NAME:
                 self.name = child.text.strip()
+
+    def write(self,path):
+        with open(path,'wt') as fd:
+            fd.write(XML_PREFIX + '\n')
+            fd.write('<' + TAG_MANIFEST + '>\n')
+            current_time = dt.datetime.now(dt.timezone.utc).isoformat(timespec='minutes')
+            fd.write('<' + TAG_TIME + '>' + str(current_time) + '</' + TAG_TIME + '>\n')
+            fd.write('<' + TAG_COMMIT + '>' + str(self.commit) + '</' + TAG_COMMIT + '>\n')
+            fd.write('<' + TAG_VERSION + '>' + str(self.version) + '</' + TAG_VERSION + '>\n')
+            if None is not self.name
+                fd.write('<' + TAG_NAME + '>' + str(self.name) + '</' + TAG_NAME + '>\n')
+            fd.write('</' + TAG_MANIFEST + '>\n')
+
+
 
