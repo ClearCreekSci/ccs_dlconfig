@@ -32,12 +32,11 @@ TAG_NAME           = 'name'
 
 class Manifest(object):
 
-    def __init__(self,path):
+    def __init__(self):
         self.time = ''
         self.commit = ''
         self.version = ''
         self.name = None
-        self.read(path)
 
     def read(self,path):
         tree = et.parse(path)
@@ -60,7 +59,7 @@ class Manifest(object):
             fd.write('<' + TAG_TIME + '>' + str(current_time) + '</' + TAG_TIME + '>\n')
             fd.write('<' + TAG_COMMIT + '>' + str(self.commit) + '</' + TAG_COMMIT + '>\n')
             fd.write('<' + TAG_VERSION + '>' + str(self.version) + '</' + TAG_VERSION + '>\n')
-            if None is not self.name
+            if None is not self.name:
                 fd.write('<' + TAG_NAME + '>' + str(self.name) + '</' + TAG_NAME + '>\n')
             fd.write('</' + TAG_MANIFEST + '>\n')
 
