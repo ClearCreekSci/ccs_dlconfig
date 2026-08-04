@@ -24,6 +24,8 @@ import xml.etree.ElementTree as et
 TAG_TIME = 'time'
 TAG_COMMIT = 'commit'
 TAG_VERSION = 'version'
+# Name is optional
+TAG_NAME = 'name'
 
 class Manifest(object):
 
@@ -31,6 +33,7 @@ class Manifest(object):
         self.time = ''
         self.commit = ''
         self.version = ''
+        self.name = None
         self.read(path)
 
     def read(self,path):
@@ -43,4 +46,6 @@ class Manifest(object):
                 self.commit = child.text.strip()
             elif child.tag == TAG_VERSION:
                 self.version = child.text.strip()
+            elif child.tag == TAG_NAME:
+                self.name = child.text.strip()
 
